@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lityhao - มุมรีวิวความน่ารักและความประทับใจ ✨</title>
+    
+    <!-- Google Fonts: Prompt & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // ปรับโทนสีชมพูทั้งหมดให้อ่อนลง ละมุนขึ้น เป็น Baby Pink
+                        pink: {
+                            50: '#fdf7f8',
+                            100: '#fcebed',
+                            200: '#f9d2dc',
+                            300: '#f5b5c7',
+                            400: '#f095af',
+                            500: '#ea7393',
+                            600: '#d45274',
+                            700: '#b13a58',
+                            800: '#93324d',
+                            900: '#7b2e43',
+                            950: '#461522',
+                        },
+                        rose: {
+                            50: '#fdf6f7',
+                            100: '#fce9eb',
+                            200: '#f9ced2',
+                            300: '#f5afb5',
+                            400: '#ef8d96',
+                            500: '#e96874',
+                            600: '#d24856',
+                            700: '#b03542',
+                            800: '#92303a',
+                            900: '#7a2d34',
+                            950: '#451217',
+                        },
+                        pastel: {
+                            pink: '#F9D2DC',
+                            softpink: '#FDF7F8',
+                            rose: '#F9CED2',
+                            deep: '#EA7393',
+                            light: '#FCEBED',
+                            text: '#7B2E43',
+                            heading: '#D45274'
+                        }
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        kanit: ['Kanit', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'magical': '0 8px 25px -5px rgba(245, 181, 199, 0.3), 0 8px 10px -6px rgba(245, 181, 199, 0.15)',
+                        'glow': '0 0 20px rgba(245, 181, 199, 0.5)',
+                        'card': '0 10px 25px -5px rgba(245, 181, 199, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #FEF9FA;
+            color: #7B2E43;
+            background-image: 
+                radial-gradient(#F9D2DC 0.75px, transparent 0.75px), 
+                radial-gradient(#FCEBED 0.75px, #FEF9FA 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            overflow-x: hidden;
+        }
+
+        .font-kanit {
+            font-family: 'Kanit', sans-serif;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Pulse Sparkle Animation */
+        @keyframes sparklePulse {
+            0%, 100% { opacity: 0.25; transform: scale(0.85); }
+            50% { opacity: 0.8; transform: scale(1.15); }
+        }
+        .animate-sparkle {
+            animation: sparklePulse 2.5s ease-in-out infinite;
+        }
+
+        /* Scrollbar custom styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FCEBED;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F5B5C7;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F095AF;
+        }
+
+        /* Canvas sparkle overlay */
+        #sparkleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Interactive Star Rating Selection */
+        .star-rating i {
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .star-rating i:hover {
+            transform: scale(1.25);
+        }
+
+        /* Card entry pop animation */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop-in {
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-pink-800">
+
+    <!-- Interactive Canvas for Sparkle Trail -->
+    <canvas id="sparkleCanvas"></canvas>
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-pink-100 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            
+            <!-- Logo & Shop Name -->
+            <a href="#" class="flex items-center gap-3 group">
+                <!-- Shop Logo Image with Fallback -->
+                <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden bg-pink-100 border-2 border-pink-200 shadow-sm group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+                    <img id="shopLogoImg" src="ลิตี้ฮ่าว.jpeg" alt="Lityhao Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-pink-400 to-rose-300 flex items-center justify-center text-white text-xl\'><i class=\'fa-solid fa-wand-magic-sparkles\'></i></div>';">
+                </div>
+                <div>
+                    <h1 class="font-kanit text-2xl sm:text-3xl md:text-4xl font-extrabold text-pink-600 tracking-wide leading-none">
+                        Lityhao
+                    </h1>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-6 font-medium text-sm text-pink-900/80">
+                <a href="#stats" class="hover:text-pink-600 transition-colors">สรุปคะแนนร้าน</a>
+                <a href="#add-review" class="hover:text-pink-600 transition-colors">เขียนรีวิว</a>
+                <a href="#all-reviews" class="hover:text-pink-600 transition-colors">รีวิวทั้งหมด</a>
+                <a href="#contact" class="hover:text-pink-600 transition-colors">ทักหาแอดมิน</a>
+            </nav>
+
+            <!-- Write Review Quick Button -->
+            <a href="#add-review" class="px-4 py-2 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold text-sm hover:opacity-95 shadow-sm transition-all flex items-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                <span>รีวิวให้ร้านนะคะ</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section id="stats" class="relative py-10 md:py-16 px-4 overflow-hidden">
+            <div class="absolute top-10 left-5 text-pink-200 text-3xl animate-sparkle">✦</div>
+            <div class="absolute top-20 right-10 text-rose-200 text-4xl animate-sparkle" style="animation-delay: 1.2s;">✨</div>
+
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+                <!-- Left Title Content -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-100 text-pink-700 font-semibold text-xs mb-4 shadow-sm border border-pink-200">
+                        <i class="fa-solid fa-heart text-pink-500"></i> เสียงตอบรับน่ารักๆ จากลูกค้าค่ะ 💕
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-pink-950 leading-tight mb-4 font-kanit tracking-wide">
+                        Lityhao <br class="hidden sm:inline">
+                        <span class="text-2xl md:text-4xl bg-gradient-to-r from-pink-500 to-rose-400 bg-clip-text text-transparent mt-2 inline-block">
+                            Review for Lityhao
+                        </span>
+                    </h1>
+                    
+                    <p class="text-pink-900/70 text-sm md:text-base mb-6 max-w-xl leading-relaxed">
+                        ขอบพระคุณลูกค้าที่น่ารักทุกคนที่ไว้วางใจเค้าเสมอมานะคะ ขอบคุณจากใจจริงค่ะ ไว้กลับมาใช้บริการใหม่ได้เสมอเลยนะคะ
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                        <a href="#add-review" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold shadow-magical hover:scale-[1.02] active:scale-95 transition-transform flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-star text-xs"></i> ให้คะแนนร้าน
+                        </a>
+                        <a href="https://line.me/ti/p/Vby4PJ70YI" target="_blank" class="px-5 py-3 rounded-2xl bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors flex items-center gap-2 text-sm shadow-sm">
+                            <i class="fa-brands fa-line text-lg"></i> Contact Lity
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Stats Widget -->
+                <div class="w-full md:w-80 bg-white rounded-3xl p-6 shadow-magical border border-pink-100 text-center animate-float relative">
+                    <div class="absolute -top-3 -right-2 bg-pink-100 text-pink-700 font-bold px-3 py-0.5 rounded-full text-xs shadow-sm border border-pink-200">
+                        คะแนนความพึงพอใจ
+                    </div>
+                    <div class="text-5xl font-extrabold text-pink-600 font-kanit my-2" id="avgScoreDisplay">4.9</div>
+                    
+                    <div class="flex justify-center gap-1 text-yellow-400 text-base mb-2">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    
+                    <p class="text-xs text-pink-800/80 font-medium">
+                        การันตีจาก <span id="totalReviewsCount" class="text-pink-600 font-bold">12</span> รีวิว 💕
+                    </p>
+
+                    <div class="mt-4 pt-4 border-t border-pink-100 space-y-2 text-xs text-left text-pink-900/80">
+                        <div class="flex justify-between items-center">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-pink-400"></i> ความเร็วในการส่งงาน</span>
+                            <span class="font-semibold text-pink-600">ดีมาก</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-pink-400"></i> ความปลอดภัย</span>
+                            <span class="font-semibold text-pink-600">ส่งงานจริง 100% ค่ะ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Banner Image Section -->
+            <div class="max-w-5xl mx-auto mt-10 px-4">
+                <div class="w-full rounded-3xl overflow-hidden shadow-magical border-2 border-pink-200 bg-white aspect-[1920/1076] relative">
+                    <img src="IMG_5633.gif" alt="Lityhao Shop Banner" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1920x1076/fcebed/ea7393?text=Lityhao+Magical+Banner+✨';">
+                </div>
+            </div>
+        </section>
+
+        <section id="add-review" class="py-10 px-4 max-w-3xl mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-magical border border-pink-100 relative">
+                
+                <div class="text-center mb-6">
+                    <span class="text-xs font-semibold text-pink-600 bg-pink-50 px-3 py-1 rounded-full border border-pink-100">Review Form 💕</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-pink-950 mt-2 font-kanit">
+                        แวะมาเขียนรีวิวให้ลิตี้นะคะ
+                    </h2>
+                    <p class="text-pink-800/70 text-xs sm:text-sm">กรอกข้อมูลความพึงพอใจเพื่อเพิ่มรีวิวแสดงบนหน้าร้านได้เลยนะคะ </p>
+                </div>
+
+                <form id="reviewForm" onsubmit="handleReviewSubmit(event)" class="space-y-5">
+                    
+                    <!-- Avatar Selection -->
+                    <div>
+                        <label class="block text-xs font-bold text-pink-900 mb-2">1. เลือกอวตารน่ารักๆ ประจำตัวค่ะ:</label>
+                        <div class="flex gap-2 flex-wrap justify-center sm:justify-start" id="avatarSelector">
+                            <button type="button" onclick="selectAvatar('cat')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-300 text-pink-600 flex items-center justify-center text-lg hover:scale-105 transition-all active">
+                                <i class="fa-solid fa-cat"></i>
+                            </button>
+                            <button type="button" onclick="selectAvatar('rabbit')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-100 text-pink-400 flex items-center justify-center text-lg hover:scale-105 transition-all">
+                                <i class="fa-solid fa-paw"></i>
+                            </button>
+                            <button type="button" onclick="selectAvatar('wand')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-100 text-pink-400 flex items-center justify-center text-lg hover:scale-105 transition-all">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </button>
+                            <button type="button" onclick="selectAvatar('heart')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-100 text-pink-400 flex items-center justify-center text-lg hover:scale-105 transition-all">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+                            <button type="button" onclick="selectAvatar('crown')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-100 text-pink-400 flex items-center justify-center text-lg hover:scale-105 transition-all">
+                                <i class="fa-solid fa-crown"></i>
+                            </button>
+                            <button type="button" onclick="selectAvatar('star')" class="avatar-btn w-11 h-11 rounded-2xl bg-pink-50 border-2 border-pink-100 text-pink-400 flex items-center justify-center text-lg hover:scale-105 transition-all">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Input Name & Service Type -->
+                    <div>
+                        <label for="authorInput" class="block text-xs font-bold text-pink-900 mb-1">2. ชื่อของคุณลูกค้า </label>
+                        <input type="text" id="authorInput" required placeholder="เช่น @Lityhao หรือ ลิตี้ฮ่าว" class="w-full px-4 py-2.5 rounded-2xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300 text-pink-900 text-sm font-medium bg-pink-50/20">
+                    </div>
+
+                    <!-- Star Rating Picker -->
+                    <div>
+                        <label class="block text-xs font-bold text-pink-900 mb-1">4. ให้คะแนนความพึงพอใจน้า:</label>
+                        <div class="flex items-center gap-3 bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
+                            <div class="star-rating flex text-2xl text-yellow-400 gap-1" id="starPicker">
+                                <i class="fa-solid fa-star" onclick="setRating(1)"></i>
+                                <i class="fa-solid fa-star" onclick="setRating(2)"></i>
+                                <i class="fa-solid fa-star" onclick="setRating(3)"></i>
+                                <i class="fa-solid fa-star" onclick="setRating(4)"></i>
+                                <i class="fa-solid fa-star" onclick="setRating(5)"></i>
+                            </div>
+                            <span id="ratingText" class="text-xs font-bold text-pink-600">5.0 (ประทับใจที่สุดเลยค่ะ 💕)</span>
+                        </div>
+                    </div>
+
+                    <!-- Impression Tag Badges -->
+                    <div>
+                        <label class="block text-xs font-bold text-pink-900 mb-1">5. จุดที่ประทับใจสุดๆ (เลือกได้เลยค่ะ):</label>
+                        <div class="flex gap-2 flex-wrap text-xs">
+                            <label class="cursor-pointer">
+                                <input type="checkbox" value="ให้คำแนะนำดีมาก" class="tag-checkbox hidden" onchange="toggleTagStyle(this)">
+                                <span class="tag-chip inline-block px-3 py-1.5 rounded-full border border-pink-200 bg-white text-pink-800 hover:bg-pink-50 transition-all font-medium">ให้คำแนะนำดีมาก</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" value="ลิตี้น่ารักตอบไว" class="tag-checkbox hidden" onchange="toggleTagStyle(this)">
+                                <span class="tag-chip inline-block px-3 py-1.5 rounded-full border border-pink-200 bg-white text-pink-800 hover:bg-pink-50 transition-all font-medium">ลิตี้น่ารักตอบไว</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" value="ส่งงานจริงแน่นอน" class="tag-checkbox hidden" onchange="toggleTagStyle(this)">
+                                <span class="tag-chip inline-block px-3 py-1.5 rounded-full border border-pink-200 bg-white text-pink-800 hover:bg-pink-50 transition-all font-medium">ส่งงานจริงแน่นอน</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" value="คุณลิตี้พูดน่ารักพูดเพราะ" class="tag-checkbox hidden" onchange="toggleTagStyle(this)">
+                                <span class="tag-chip inline-block px-3 py-1.5 rounded-full border border-pink-200 bg-white text-pink-800 hover:bg-pink-50 transition-all font-medium">คุณลิตี้พูดน่ารักพูดเพราะ</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Review Text area -->
+                    <div>
+                        <label for="commentInput" class="block text-xs font-bold text-pink-900 mb-1">6. พิมพ์ข้อความรีวิวให้ลิตี้:</label>
+                        <textarea id="commentInput" required rows="3" placeholder="พิมพ์รีวิวได้เลยนะคะ" class="w-full px-4 py-2.5 rounded-2xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300 text-pink-900 text-sm bg-pink-50/20"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold text-sm hover:opacity-95 shadow-magical active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane text-xs"></i> ส่งรีวิว
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="all-reviews" class="py-10 px-4 max-w-6xl mx-auto">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <span class="text-xs font-semibold text-pink-600 bg-pink-100 px-3 py-1 rounded-full border border-pink-200">Community Feed 💕</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-pink-950 mt-1 font-kanit">
+                        รีวิวทั้งหมดจากคุณลูกค้า
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Reviews Container Grid -->
+            <div id="reviewsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Dynamic Reviews will render here via JavaScript -->
+            </div>
+        </section>
+
+        <section id="contact" class="py-10 px-4 max-w-5xl mx-auto">
+            <div class="bg-gradient-to-r from-pink-400 via-rose-300 to-pink-300 rounded-3xl p-8 text-center text-white shadow-magical relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-2xl md:text-3xl font-bold font-kanit mb-2">
+                        สอบถามสนใจอะไรทักมาสอบถามได้เลยนะคะ 🩷
+                    </h2>
+                    <p class="text-xs md:text-sm opacity-95 mb-6 max-w-xl mx-auto">
+                        แอดไลน์มาทักทายสอบถามกับเค้าได้ตลอดเลยนะคะ ยินดีมากๆ ยินดีเสมอค่ะ ขอบคุณมากๆค่า ไว้มาใหม่น้า
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="https://line.me" target="_blank" class="inline-flex items-center gap-2 px-7 py-3 bg-white text-pink-600 rounded-2xl font-bold text-sm hover:bg-pink-50 shadow-md hover:scale-105 transition-all">
+                            <i class="fa-brands fa-line text-xl text-emerald-500"></i> แอดไลน์หาลิตี้ @lityhao
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Toast Alert Modal with Thank You GIF -->
+    <div id="toastModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white border border-pink-200 shadow-magical rounded-3xl p-6 max-w-sm w-full mx-4 text-center text-pink-950 transform scale-95 transition-transform duration-300">
+            <div class="w-32 h-32 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-pink-200 shadow-sm bg-pink-50">
+                <img src="E2D59105-C61C-4918-A960-F130DC9AEE10.gif" alt="Thank You GIF" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200/fcebed/ea7393?text=Thank+You+✨';">
+            </div>
+            <h4 class="font-bold text-base font-kanit text-pink-600 mb-1">ขอบพระคุณสำหรับรีวิวนะคะ ♡</h4>
+            <p class="text-xs text-pink-800/80 mb-5">บันทึกรีวิวน่ารักๆ ให้ลิตี้เรียบร้อยแล้วนะคะ </p>
+            <button onclick="closeToastModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold text-xs hover:opacity-95 transition-all shadow-sm">
+                ตกลงค่ะ ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-pink-100/60 border-t border-pink-200/60 py-6 text-center text-xs text-pink-800/80">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="font-kanit font-bold text-pink-900 text-sm">
+                Lityhao ♡
+            </div>
+            <div>
+                © 2026 Lityhao LINE Shop Reviews. All rights reserved.
+            </div>
+            <div class="flex gap-4 text-base text-pink-400">
+                <a href="#" class="hover:text-pink-600 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="hover:text-pink-600 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-pink-600 transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('sparkleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 4 + 1.5;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.color = `hsl(${Math.random() * 15 + 345}, 80%, 88%)`;
+                this.life = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.035;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(0, this.life);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.25) {
+                particles.push(new Particle(e.clientX, e.clientY));
+            }
+        });
+
+        function animateSparkles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+
+        let currentSelectedAvatar = 'cat';
+        let currentSelectedRating = 5;
+
+        const avatarIconMap = {
+            cat: 'fa-solid fa-cat',
+            rabbit: 'fa-solid fa-paw',
+            wand: 'fa-solid fa-wand-magic-sparkles',
+            heart: 'fa-solid fa-heart',
+            crown: 'fa-solid fa-crown',
+            star: 'fa-solid fa-star'
+        };
+
+        // Start with 0 real customer reviews as requested
+        let reviews = [];
+
+        // Avatar Selection Handler
+        function selectAvatar(avatarType, event) {
+            currentSelectedAvatar = avatarType;
+            const buttons = document.querySelectorAll('#avatarSelector button');
+            buttons.forEach(btn => {
+                btn.classList.remove('border-pink-300', 'bg-pink-100', 'text-pink-600', 'shadow-sm');
+                btn.classList.add('border-pink-100', 'text-pink-400');
+            });
+            const clickedBtn = event ? event.currentTarget : document.querySelector(`button[onclick*="selectAvatar('${avatarType}')"]`);
+            if (clickedBtn) {
+                clickedBtn.classList.remove('border-pink-100', 'text-pink-400');
+                clickedBtn.classList.add('border-pink-300', 'bg-pink-100', 'text-pink-600', 'shadow-sm');
+            }
+        }
+
+        // Attach event listeners to avatar buttons properly
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatarBtns = document.querySelectorAll('#avatarSelector button');
+            avatarBtns.forEach(btn => {
+                const onclickAttr = btn.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes('cat')) {
+                    btn.setAttribute('onclick', "selectAvatar('cat', event)");
+                } else if (onclickAttr && onclickAttr.includes('rabbit')) {
+                    btn.setAttribute('onclick', "selectAvatar('rabbit', event)");
+                } else if (onclickAttr && onclickAttr.includes('wand')) {
+                    btn.setAttribute('onclick', "selectAvatar('wand', event)");
+                } else if (onclickAttr && onclickAttr.includes('heart')) {
+                    btn.setAttribute('onclick', "selectAvatar('heart', event)");
+                } else if (onclickAttr && onclickAttr.includes('crown')) {
+                    btn.setAttribute('onclick', "selectAvatar('crown', event)");
+                } else if (onclickAttr && onclickAttr.includes('star')) {
+                    btn.setAttribute('onclick', "selectAvatar('star', event)");
+                }
+            });
+        });
+
+        // Star Rating Picker
+        function setRating(score) {
+            currentSelectedRating = score;
+            const stars = document.querySelectorAll('#starPicker i');
+            stars.forEach((star, index) => {
+                if (index < score) {
+                    star.className = 'fa-solid fa-star';
+                } else {
+                    star.className = 'fa-regular fa-star';
+                }
+            });
+
+            const ratingTexts = {
+                1: '1.0 (ต้องปรับปรุงแก้ไข)',
+                2: '2.0 (พอใช้)',
+                3: '3.0 (ปานกลาง)',
+                4: '4.0 (ประทับใจ)',
+                5: '5.0 (ประทับใจที่สุด)'
+            };
+            document.getElementById('ratingText').innerText = ratingTexts[score];
+        }
+
+        // Tag Toggle Style
+        function toggleTagStyle(checkbox) {
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.classList.remove('border-pink-200', 'bg-white', 'text-pink-800');
+                span.classList.add('border-pink-300', 'bg-pink-100', 'text-pink-700', 'shadow-sm');
+            } else {
+                span.classList.remove('border-pink-300', 'bg-pink-100', 'text-pink-700', 'shadow-sm');
+                span.classList.add('border-pink-200', 'bg-white', 'text-pink-800');
+            }
+        }
+
+        // Handle Review Form Submission
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+
+            const author = document.getElementById('authorInput').value.trim();
+            const comment = document.getElementById('commentInput').value.trim();
+            
+            // Collect checked tags
+            const checkedTags = Array.from(document.querySelectorAll('.tag-checkbox:checked')).map(cb => cb.value);
+
+            const newReview = {
+                id: 'rev_' + Date.now(),
+                avatar: currentSelectedAvatar,
+                author: author,
+                rating: currentSelectedRating,
+                tags: checkedTags.length > 0 ? checkedTags : ['บริการน่ารักมาก'],
+                comment: comment,
+                date: 'วันนี้'
+            };
+
+            reviews.unshift(newReview);
+            renderReviews();
+            updateStats();
+
+            // Reset form
+            document.getElementById('reviewForm').reset();
+            // Reset tags styling
+            document.querySelectorAll('.tag-chip').forEach(span => {
+                span.classList.remove('border-pink-300', 'bg-pink-100', 'text-pink-700', 'shadow-sm');
+                span.classList.add('border-pink-200', 'bg-white', 'text-pink-800');
+            });
+            setRating(5);
+
+            // Show Popup Modal with GIF
+            const toast = document.getElementById('toastModal');
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.querySelector('.transform').classList.remove('scale-95');
+            toast.querySelector('.transform').classList.add('scale-100');
+        }
+
+        function closeToastModal() {
+            const toast = document.getElementById('toastModal');
+            toast.classList.add('opacity-0', 'pointer-events-none');
+            toast.querySelector('.transform').classList.remove('scale-100');
+            toast.querySelector('.transform').classList.add('scale-95');
+        }
+
+        // Delete review function
+        function deleteReview(id) {
+            reviews = reviews.filter(r => r.id !== id);
+            renderReviews();
+            updateStats();
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // Render Reviews Grid
+        function renderReviews() {
+            const grid = document.getElementById('reviewsGrid');
+            
+            if (reviews.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-pink-100 shadow-sm">
+                        <div class="w-16 h-16 rounded-full bg-pink-50 text-pink-400 flex items-center justify-center text-2xl mx-auto mb-3">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="font-kanit font-bold text-pink-950 text-base mb-1">ยังไม่มีรีวิวในขณะนี้ค่ะ</h3>
+                        <p class="text-xs text-pink-800/70">มาเป็นคนแรกที่เขียนรีวิวส่งให้เค้าได้เลยนะคะ♡</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = reviews.map(rev => {
+                const starsHtml = '<i class="fa-solid fa-star"></i>'.repeat(rev.rating);
+                const tagsHtml = rev.tags.map(t => `<span class="px-2.5 py-0.5 rounded-full bg-pink-50 text-pink-700 text-[11px] font-medium border border-pink-100">${t}</span>`).join('');
+                
+                return `
+                    <div class="bg-white rounded-3xl p-6 shadow-card border border-pink-100 flex flex-col justify-between animate-pop-in relative group hover:border-pink-300 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-pink-100 border border-pink-200 text-pink-600 flex items-center justify-center text-lg shadow-sm">
+                                        <i class="${avatarIconMap[rev.avatar] || 'fa-solid fa-cat'}"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-kanit font-bold text-pink-950 text-sm">${escapeHtml(rev.author)}</h4>
+                                        <span class="text-[11px] text-pink-400 font-medium">${rev.date}</span>
+                                    </div>
+                                </div>
+                                <div class="flex text-yellow-400 text-xs gap-0.5">
+                                    ${starsHtml}
+                                </div>
+                            </div>
+
+                            <p class="text-pink-900/80 text-xs sm:text-sm leading-relaxed mb-4 bg-pink-50/30 p-3.5 rounded-2xl border border-pink-50">
+                                "${escapeHtml(rev.comment)}"
+                            </p>
+                        </div>
+
+                        <div>
+                            <div class="flex flex-wrap gap-1.5 mb-3">
+                                ${tagsHtml}
+                            </div>
+                            <div class="pt-3 border-t border-pink-50 flex items-center justify-between text-[11px] text-pink-400 font-medium">
+                                <span class="flex items-center gap-1 text-pink-500"><i class="fa-solid fa-circle-check text-[10px]"></i> รีวิวจากลูกค้าจริง</span>
+                                <button onclick="deleteReview('${rev.id}')" class="text-pink-300 hover:text-rose-500 transition-colors" title="ลบรีวิว"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update Stats Display based on actual reviews array
+        function updateStats() {
+            const count = reviews.length;
+            document.getElementById('totalReviewsCount').innerText = count;
+            
+            if (count === 0) {
+                document.getElementById('avgScoreDisplay').innerText = '5.0';
+                return;
+            }
+
+            const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+            const avg = (sum / count).toFixed(1);
+            document.getElementById('avgScoreDisplay').innerText = avg;
+        }
+
+        // Initial Render
+        renderReviews();
+        updateStats();
+    </script>
+</body>
+</html>
